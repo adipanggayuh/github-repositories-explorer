@@ -1,0 +1,1 @@
+export const SEARCH_USER_URL = `/search/users`;

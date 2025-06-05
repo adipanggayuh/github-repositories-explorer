@@ -53,6 +53,7 @@ function App() {
       }
       setIsSearchClicked(true);
     }else{
+      setIsUserLoading(false);
       setIsFieldEmpty(true);
     }
     

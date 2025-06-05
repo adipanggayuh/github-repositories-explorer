@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Card, Collapse, Grid, } from '@mui/material';
@@ -21,6 +21,13 @@ const UserSection: React.FC<UserSectionProps> =({users, handleGetRepos, repos, i
   const [expanded, setExpanded] = useState<string | false>(false);
   /**Local State - end*/
 
+  /**React lifecycle -start*/
+  // To close collapse when user search again
+  useEffect(()=>{
+    setExpanded(false);
+  },[isUserLoading])
+  /**React lifecycle -end*/
+
   /**Handler -start*/  
   const handleExpand = (panel: string, reposUrl:string) => {
       let isExpanded:boolean = expanded !== panel; 
@@ -36,11 +43,11 @@ const UserSection: React.FC<UserSectionProps> =({users, handleGetRepos, repos, i
     {
       isUserLoading ?
       <UserSectionSkeleton/> :
-      users.map((user:any, index:number)=>{
-        return <React.Fragment key={"user"+index} >
+      users.map((user:any)=>{
+        return <React.Fragment key={user.id} >
               <Card 
                 sx={{marginBottom:'10px',}}
-                onClick={()=>handleExpand(PANEL+index, user.repos_url)}
+                onClick={()=>handleExpand(PANEL+user.id, user.repos_url)}
                 >
                   <Grid 
                     container 
@@ -62,12 +69,12 @@ const UserSection: React.FC<UserSectionProps> =({users, handleGetRepos, repos, i
                     <Grid size={2} textAlign={'right'}>
                       <ExpandMoreIcon sx={{
                         transition: 'transform 0.3s ease',
-                        transform: expanded === PANEL+index? 'rotate(180deg)' : 'rotate(0deg)',
+                        transform: expanded === PANEL+user.id? 'rotate(180deg)' : 'rotate(0deg)',
                       }}
                       />
                     </Grid>
                   </Grid>
-                  <Collapse in={expanded === PANEL+index}>
+                  <Collapse in={expanded === PANEL+user.id}>
                     <RepoSection repos={repos} isLoading={isRepoLoading}/>
                   </Collapse>
               </Card>

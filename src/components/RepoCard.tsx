@@ -11,14 +11,13 @@ import { NO_DESCRIPTION } from '../constants/constant';
 
 /**Component Prop Types */
 type RepoCardProps = {
-    repo: RepositoryObject,
-    index: number
+    repo: RepositoryObject
 }
 
-const RepoCard: React.FC<RepoCardProps> = ({repo, index}) => {
+const RepoCard: React.FC<RepoCardProps> = ({repo}) => {
   return (
     <Card 
-        key={"repo"+index} 
+        key={repo.id} 
         sx={{
             marginBottom:'10px', 
             padding:'12px', 

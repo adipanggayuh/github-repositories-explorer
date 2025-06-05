@@ -22,7 +22,7 @@ export const RepoSection: React.FC<RepoSectionProps> = ({repos,isLoading}) => {
                 { 
                     repos.length ? 
                     repos.map((repo:RepositoryObject,index:number)=>{
-                            return <RepoCard key={'repoCard'+index} repo={repo} index={index}/>
+                            return <RepoCard key={'repoCard'+index} repo={repo}/>
                         }) 
                     : <Typography align='center'> {REPO_NOT_FOUND_MSG}</Typography>
                 }

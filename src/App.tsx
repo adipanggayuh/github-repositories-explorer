@@ -5,6 +5,7 @@ import UserSection from './components/UserSection';
 import axios from 'axios';
 import type { RepositoryObject } from './interface/interface';
 import SearchSection from './components/SearchSection';
+import SimpleAppBar from './components/SimpleAppBar';
 
 function App() {
   /**Local State - Start**/
@@ -81,6 +82,7 @@ function App() {
   return (
     <>
       <Container maxWidth="sm">
+        <SimpleAppBar />
         {/* Search section */}
         <SearchSection 
            isSearchClicked={isSearchClicked}

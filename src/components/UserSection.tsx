@@ -4,17 +4,19 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Card, Collapse, Grid, } from '@mui/material';
 import { RepoSection } from './RepoSection';
 import type { RepositoryObject } from '../interface/interface';
-import { RepoSectionSkeleton } from './Skeleton';
 import { grey } from '@mui/material/colors';
+import { UserSectionSkeleton } from './Skeleton';
 
+/**Component Prop Types */
 type UserSectionProps = {
     users: any[],
     handleGetRepos:(url:string)=>void,
     repos: RepositoryObject[],
-    loading: boolean
+    isRepoLoading: boolean,
+    isUserLoading:boolean,
 }
-
-const UserSection: React.FC<UserSectionProps> =({users, handleGetRepos, repos, loading})=> {
+const PANEL:string = 'panel';
+const UserSection: React.FC<UserSectionProps> =({users, handleGetRepos, repos, isUserLoading, isRepoLoading})=> {
   /**Local State - start*/
   const [expanded, setExpanded] = useState<string | false>(false);
   /**Local State - end*/
@@ -32,11 +34,13 @@ const UserSection: React.FC<UserSectionProps> =({users, handleGetRepos, repos, l
   return (
     <div>
     {
+      isUserLoading ?
+      <UserSectionSkeleton/> :
       users.map((user:any, index:number)=>{
-        return <React.Fragment  key={"user"+index} >
+        return <React.Fragment key={"user"+index} >
               <Card 
                 sx={{marginBottom:'10px',}}
-                onClick={()=>handleExpand('panel'+index, user.repos_url)}
+                onClick={()=>handleExpand(PANEL+index, user.repos_url)}
                 >
                   <Grid 
                     container 
@@ -58,17 +62,13 @@ const UserSection: React.FC<UserSectionProps> =({users, handleGetRepos, repos, l
                     <Grid size={2} textAlign={'right'}>
                       <ExpandMoreIcon sx={{
                         transition: 'transform 0.3s ease',
-                        transform: expanded === 'panel'+index? 'rotate(180deg)' : 'rotate(0deg)',
+                        transform: expanded === PANEL+index? 'rotate(180deg)' : 'rotate(0deg)',
                       }}
                       />
                     </Grid>
                   </Grid>
-                  <Collapse in={expanded === 'panel'+index}>
-                  <div style={{padding:'12px'}}>
-                    {
-                      loading ? <RepoSectionSkeleton/> : <RepoSection repos={repos}/>
-                    }
-                  </div>
+                  <Collapse in={expanded === PANEL+index}>
+                    <RepoSection repos={repos} isLoading={isRepoLoading}/>
                   </Collapse>
               </Card>
               

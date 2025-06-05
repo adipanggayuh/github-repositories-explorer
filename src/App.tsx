@@ -1,15 +1,10 @@
 import {useState} from 'react';
 import Container from '@mui/material/Container';
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
 import { getUserByName } from './api/searchApi';
-import SearchIcon from '@mui/icons-material/Search';
 import UserSection from './components/UserSection';
 import axios from 'axios';
 import type { RepositoryObject } from './interface/interface';
-import { UserSectionSkeleton } from './components/Skeleton';
+import SearchSection from './components/SearchSection';
 
 function App() {
   /**Local State - Start**/
@@ -19,7 +14,7 @@ function App() {
   const [users, setUsers] = useState<any[]>([]);
   const [repos, setRepos] = useState<RepositoryObject[]>([]);
   const [reposLoading, setReposLoading] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [isUserLoading, setIsUserLoading] = useState(false);
   /**Local State - End**/
 
   /**Handler - Start**/
@@ -35,7 +30,8 @@ function App() {
   }
   
   const handleSearch=()=>{
-    setLoading(true);
+    setRepos([]);
+    setIsUserLoading(true);
     if(username != ""){
 
       setIsFieldEmpty(false);
@@ -45,15 +41,14 @@ function App() {
           if(res.status == 200){
             setUsers(res.data.items.slice(0, 5));
           }
-          console.log({res});
-          setLoading(false);
-        }).then((err:any)=>{
+          setIsUserLoading(false);
+        }).catch((err:any)=>{
           console.log({err});
-          setLoading(false);
+          setIsUserLoading(false);
         })
       } catch (error:any) {
         console.log({error});
-        setLoading(false);
+        setIsUserLoading(false);
       }
       setIsSearchClicked(true);
     }else{
@@ -86,29 +81,25 @@ function App() {
   return (
     <>
       <Container maxWidth="sm">
-        <Box
-          component="form"
-          noValidate
-          autoComplete="off"
-          style={{marginBottom:'10px'}}
-          >
-            <Stack spacing={2}>
-              <TextField 
-                id="username" 
-                variant="outlined" 
-                placeholder='Enter username' 
-                onChange={(e)=>handleChange(e.target.value)}
-                error={isFieldEmpty}
-                helperText={isFieldEmpty ? "Please enter username" : ""}
-              />
-              <Button variant="contained" onClick={handleSearch} startIcon={<SearchIcon/>}>Search</Button>
-              {isSearchClicked && !loading && <label>Showing users for "{username}"</label>}
-            </Stack>
-        </Box>
-        {
-          loading ? <UserSectionSkeleton/> : <UserSection users={users} handleGetRepos={handleGetRepos} repos={repos} loading={reposLoading}/>
-        }
-        
+        {/* Search section */}
+        <SearchSection 
+           isSearchClicked={isSearchClicked}
+            isUserLoading={isUserLoading}
+            users={users}
+            username={username}
+            handleChange={handleChange}
+            isFieldEmpty={isFieldEmpty}
+            handleSearch={handleSearch}
+        />
+        {/* user section */}
+        <UserSection 
+          users={users} 
+          handleGetRepos={handleGetRepos} 
+          repos={repos} 
+          isUserLoading={isUserLoading} 
+          isRepoLoading={reposLoading}
+        />
+      
       </Container>
     </>
   )

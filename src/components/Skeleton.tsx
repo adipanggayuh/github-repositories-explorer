@@ -1,7 +1,6 @@
 import { Box, Card, Grid } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
 
-
 export function RepoCardSkeleton() {
   return (
           <Card sx={{marginBottom:'10px'}}>

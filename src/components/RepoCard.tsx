@@ -7,7 +7,9 @@ import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarIcon from '@mui/icons-material/Star';
 import { grey, orange } from '@mui/material/colors';
 import { Card } from '@mui/material';
+import { NO_DESCRIPTION } from '../constants/constant';
 
+/**Component Prop Types */
 type RepoCardProps = {
     repo: RepositoryObject,
     index: number
@@ -31,7 +33,7 @@ const RepoCard: React.FC<RepoCardProps> = ({repo, index}) => {
         <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
                 <Grid size={10}>
-                    <Typography>
+                    <Typography component="span" sx={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
                         {repo.name}
                     </Typography>
                 </Grid>
@@ -43,7 +45,7 @@ const RepoCard: React.FC<RepoCardProps> = ({repo, index}) => {
                 </Grid>
                 <Grid size={12}>
                     <Typography component="span" sx={{ color: 'text.secondary' }}>
-                        {repo.description || "No description available"}
+                        {repo.description || NO_DESCRIPTION}
                     </Typography>
                 </Grid>
             </Grid>
